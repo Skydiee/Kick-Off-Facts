@@ -3,71 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer Facts</title>
+    <title>Kick Off Facts!!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* General styles */
         body {
-            font-family: sans-serif;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+            height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow: hidden;
         }
 
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Navbar at the top */
+        .navbar {
+            width: 100%;
+            background-color: #4CAF50;
+            padding: 15px;
             text-align: center;
-        }
-
-        #fact {
             font-size: 1.5rem;
-            margin-bottom: 20px;
+            color: white;
+            font-weight: bold;
         }
 
-        #next-fact {
+        /* Theme toggle button */
+        .theme-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            color: #333;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            color: #4CAF50;
+        }
+
+        .dark-mode .theme-toggle-btn {
+            color: #fff;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        .dark-mode .container {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .dark-mode h1,
+        .dark-mode #fact,
+        .dark-mode #next-fact {
+            color: white;
+        }
+
+        .dark-mode #next-fact,
+        .dark-mode #clear-fact {
+            background-color: #9C27B0;
+        }
+
+        /* Container Styling */
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 80px; /* To avoid overlap with navbar */
+        }
+
+        /* Title Styling */
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Fact Number Styling */
+        #fact-number {
+            font-size: 1.2rem;
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* Fact Text */
+        #fact {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        /* Button Styling */
+        #next-fact,
+        #clear-fact {
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            width: auto; /* Shrink to fit content */
+            margin-left: auto;
+            margin-right: auto;
         }
+
+        #next-fact:hover,
+        #clear-fact:hover {
+            background-color: #45a049;
+        }
+
+        /* Fun Fact Counter Styling */
+        #fact-counter {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Slider for Fact Progress */
+        #slider {
+            width: 100%;
+            height: 20px;
+            appearance: none;
+            border-radius: 10px;
+            background: linear-gradient(to right, #4CAF50 0%, #4CAF50 0%, #ddd 0%, #ddd 100%);
+            outline: none;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        #slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        /* Slider Visibility Fix in Dark Mode */
+        .dark-mode #slider {
+            background: linear-gradient(to right, #9C27B0 0%, #9C27B0 0%, #ddd 0%, #ddd 100%);
+        }
+
+        /* Pop-up SIUUUU with confetti */
+        #siuuu {
+            display: none;
+            font-size: 2rem;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 20px;
+            border-radius: 10px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: siuuuAnimation 1.5s ease-in-out forwards;
+        }
+
+        @keyframes siuuuAnimation {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+        }
+
+        /* Confetti animation */
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Confetti Pop effect */
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #FF0;
+            border-radius: 50%;
+            animation: confettiFall 2s ease-in-out infinite;
+            opacity: 1;
+        }
+
+        .confetti:nth-child(odd) {
+            background-color: #FF1493;
+            animation-duration: 3s;
+            animation-delay: 0.5s;
+        }
+
+        .confetti:nth-child(even) {
+            background-color: #1E90FF;
+            animation-duration: 3s;
+            animation-delay: 0.8s;
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 999;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="fact"></h1>
-        <button id="next-fact">Next Fact</button>
+
+    <!-- Navbar at the top -->
+    <div class="navbar">
+        Kick Off Facts!!
     </div>
+
+    <!-- Theme toggle button -->
+    <button class="theme-toggle-btn" id="theme-toggle">🌞</button>
+
+    <div class="container">
+        <!-- Fact Number -->
+        <div id="fact-number">FUN FACT #1</div>
+        <h1 id="fact">No fact generated yet...</h1>
+        <button id="next-fact">Generate Fact!</button>
+        <button id="clear-fact">Clear Fact</button>
+
+        <!-- Fact Counter and Slider -->
+        <div id="fact-counter">
+            <span>Slider Progress: </span>
+            <input type="range" id="slider" min="1" max="8" value="1" disabled>
+        </div>
+    </div>
+
+    <!-- SIUUU Popup -->
+    <div id="siuuu">SIUUUU!</div>
+
+    <!-- Confetti -->
+    <div class="confetti-container" id="confetti-container"></div>
+
     <script>
         const facts = [
-            "The first official international soccer match was played between Scotland and England in 1872.",
-            "The world's most expensive soccer player is Kylian Mbappé, who transferred to Paris Saint-Germain for €180 million in 2017.",
-            "The longest goal in soccer history was scored by  Ashton  Gate  in  1998,  at a distance of 91.9 meters (301 feet) from the goal.",
-            "The FIFA World Cup trophy is made of 18-karat gold and weighs 6.175 kilograms (13.6 pounds).",
-            "The most goals scored in a single FIFA World Cup match was 10, achieved by Hungary against El Salvador in 1982.",
-            "The smallest country to ever qualify for the FIFA World Cup is Iceland, with a population of just over 300,000.",
-            "The only team to win the FIFA World Cup without losing a single match is Brazil in 1970.",
-            "The largest stadium in the world for soccer is the Rungrado 1st of May Stadium in North Korea, with a capacity of 114,000 spectators.",
-            "The most popular sport in the world is soccer, with an estimated 3.5 billion fans globally.",
-            "The first ever yellow and red cards in a soccer game were given in the 1970 FIFA World Cup."
+            "In 2004, Chelsea FC became the first English club to sign a player for over £30 million, purchasing Didier Drogba.",
+            "Cristiano Ronaldo scored his 700th career goal in October 2019, making him one of the few players to reach this milestone.",
+            "Soccer's first recorded rules were established in 1863 by the Football Association in England.",
+            "The fastest red card in history was given just 2 seconds into a game in 2000, to Lee Todd of England.",
+            "Brazil's Pelé is the only player to have won three FIFA World Cup titles (1958, 1962, 1970).",
+            "The shortest player to ever play in a World Cup is 5'1\" (155 cm) Juan Pablo Ángel of Colombia.",
+            "In 1995, South Africa became the first African country to host the Rugby World Cup, but it also played a key role in promoting soccer across the continent.",
+            "The most goals scored in a World Cup by one player is Miroslav Klose of Germany with 16 goals.",
+            "The longest match in soccer history lasted for 3 hours and 23 minutes, played between Stockport County and Doncaster Rovers in 1946.",
+            "The fastest goal in soccer history was scored in just 2.4 seconds by Tom Haughton in 2004."
         ];
 
         const factElement = document.getElementById('fact');
+        const factNumberElement = document.getElementById('fact-number');
         const nextFactButton = document.getElementById('next-fact');
+        const clearFactButton = document.getElementById('clear-fact');
+        const slider = document.getElementById('slider');
+        const siuuuElement = document.getElementById('siuuu');
+        const confettiContainer = document.getElementById('confetti-container');
+        const themeToggleButton = document.getElementById('theme-toggle');
 
+        let currentFactIndex = -1;
+        let sliderValue = 1;
+        let factCounter = 1;
+
+        // Function to display a random fact
         function displayRandomFact() {
-            const randomIndex = Math.floor(Math.random() * facts.length);
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * facts.length);
+            } while (randomIndex === currentFactIndex); // Avoid repeating the same fact
+
+            currentFactIndex = randomIndex;
             factElement.textContent = facts[randomIndex];
+            factNumberElement.textContent = `FUN FACT #${factCounter}`;
+
+            sliderValue++;
+            slider.value = sliderValue;
+
+            factCounter++;
+
+            if (sliderValue === 8) {
+                showSiuuu();
+            }
         }
 
+        // Show the "SIUUUU" popup with confetti when slider reaches 8
+        function showSiuuu() {
+            siuuuElement.style.display = 'block';
+            createConfetti();
+            setTimeout(() => {
+                siuuuElement.style.display = 'none';
+                clearConfetti();
+            }, 3000);
+        }
+
+        // Generate random confetti effect with floating and rotating animation
+        function createConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.top = `${Math.random() * 100}%`;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                confettiContainer.appendChild(confetti);
+            }
+        }
+
+        // Clear confetti after animation
+        function clearConfetti() {
+            while (confettiContainer.firstChild) {
+                confettiContainer.removeChild(confettiContainer.firstChild);
+            }
+        }
+
+        // Toggle between light and dark themes
+        themeToggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            themeToggleButton.textContent = isDarkMode ? '🌙' : '🌞';
+        });
+
+        // Display a new fact when "Generate Fact!" is clicked
         nextFactButton.addEventListener('click', displayRandomFact);
 
-        // Display a fact on page load
-        displayRandomFact();
+        // Clear the displayed fact when "Clear Fact" is clicked
+        clearFactButton.addEventListener('click', () => {
+            factElement.textContent = 'No fact generated yet...';
+            factNumberElement.textContent = 'FUN FACT #1';
+            slider.value = 1;
+            sliderValue = 1;
+            factCounter = 1;
+        });
+
     </script>
+
 </body>
 </html>
