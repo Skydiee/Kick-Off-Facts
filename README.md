@@ -38,4 +38,9 @@ You can run this project locally by following these steps:
 3. **Open `index.html` in your browser**:
     Simply double-click `index.html` or open it via your browser's "Open File" option.
 
-## File Structure
+## Demo
+
+To see the project in action, visit the [live demo link]
+
+## Contributing
+If you would like to contribute to this project, feel free to open an issue or submit a pull request.
