@@ -40,7 +40,7 @@ You can run this project locally by following these steps:
 
 ## Demo
 
-To see the project in action, visit the [live demo link]
+To see the project in action, visit the https://skydiee.github.io/Kick-Off-Facts/
 
 ## Contributing
 If you would like to contribute to this project, feel free to open an issue or submit a pull request.
